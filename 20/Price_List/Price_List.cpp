@@ -39,7 +39,7 @@ int main(){
   distb[k] = 0;
   stk.clear();
   stk.push_back(k);
-  for(Int i = 0;i < n;i++){
+  for(Int i = 0;i < stk.size();i++){
     Int from = stk[i];
     ban[from] = true;
     for(Int j = 0;j < edge[from].size();j++){
