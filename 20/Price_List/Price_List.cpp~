@@ -1,0 +1,77 @@
+#include<cstdio>
+#include<algorithm>
+#include<queue>
+#include<vector>
+#include<map>
+using namespace std;
+typedef pair<int, int> P;
+#define INF (1 << 30)
+vector<int> edge[105000], towns;
+int dist[105000];
+int n, m, k, a, b, x, y;
+bool pl[105000];
+void bfs(int s){
+  fill(dist, dist + 105000, INF);
+  queue<int> q;
+  dist[s] = 0;
+  q.push(s);
+  while(!q.empty()){
+    for(int i = q.size() - 1;i >= 0;i--){
+      int from = q.front();q.pop();
+      towns.push_back(from);
+      for(int i = 0;i < edge[from].size();i++){
+	int to = edge[from][i];
+	if(dist[to] != INF)continue;
+	dist[to] = dist[from] + 1;
+	q.push(to);
+      }
+    }
+  }
+}
+
+int main(){
+  scanf("%d%d%d%d%d", &n, &m, &k, &a, &b);
+  for(int i = 0;i < m;i++){
+    scanf("%d%d", &x, &y);
+    x--,y--;
+    edge[x].push_back(y);
+    edge[y].push_back(x);
+  }
+  bfs(k - 1);
+  for(int i = 0;i < n;i++){
+    int from = towns[i];
+    for(int j = 0;j < edge[from].size();j++){
+      int to = edge[from][j];
+      if(dist[to] == dist[from]){
+	pl[to] = pl[from] = true;
+      }
+    }
+  }
+
+  for(int i = 0;i < n;i++){
+    int from = towns[i];
+    for(int j = 0;j < edge[from].size();j++){
+      int to = edge[from][j];
+      if(dist[to] == dist[from] + 1 && pl[from]){
+	pl[to] = true;
+      }
+    }
+  }
+  
+  for(int i = 0;i < n;i++){
+    printf("%d %d %d\n", i, dist[i], pl[i]);
+    if(a * 2 <= b){
+      printf("%d\n", dist[i] * a);
+    }
+    else{
+      if(dist[i] % 2 == 0)
+	printf("%d\n", dist[i] / 2 * b);
+      else if(!pl[i])
+	printf("%d\n", dist[i] / 2 * b + a);
+      else
+	printf("%d\n", dist[i] / 2 * b + min(a, b));
+    } 
+  }
+  return 0;
+
+}
