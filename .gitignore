@@ -16,3 +16,8 @@
 *~
 *#
 
+
+#executive files
+*.out
+*.exe
+
